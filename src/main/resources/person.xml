@@ -1,0 +1,17 @@
+<persons>
+<person>
+  <name>przodownik</name>
+  <country>Poland</country>
+  <age>36</age>
+</person>
+<person>
+  <name>anieszka</name>
+  <country>Poland</country>
+  <age>36</age>
+</person>
+<person>
+  <name>bak</name>
+  <country>Poland</country>
+  <age>4</age>
+</person>
+</persons>
