@@ -37,13 +37,11 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
     
     compile 'org.apache.camel:camel-core:$camelVersion'
-    compile 'org.apache.camel:camel-metrics:2.15.2' 
-   compile "org.apache.camel:camel-spring-boot:$camelVersion"
+    compile "org.apache.camel:camel-spring-boot:$camelVersion"
     compile 'org.apache.camel:camel-spring:$camelVersion'
-   compile 'org.apache.camel:camel-spring-javaconfig:2.15.2'
+    compile 'org.apache.camel:camel-spring-javaconfig:2.15.2'
    
     compile "org.apache.camel:camel-jaxb:$camelVersion"
-    compile "org.apache.camel:camel-jackson:$camelVersion"
     compile "org.apache.camel:camel-jms:$camelVersion"
     compile("org.apache.activemq:activemq-broker")
     compile("org.apache.activemq:activemq-client")
@@ -52,20 +50,30 @@ dependencies {
         exclude module: "org.springframework:spring"
     }
     compile "org.apache.camel:camel-bindy:$camelVersion"
-    compile "org.apache.camel:camel-cxf:$camelVersion"   
+    
+    compile ("org.apache.camel:camel-cxf:$camelVersion")  {
+       exclude module:  "org.apache.cxf » cxf-rt-frontend-jaxws"  
+       exclude module: "org.apache.cxf:cxf-rt-bindings-soap"
+       exclude module: "org.apache.cxf:cxf-rt-frontend-jaxrs"
+    
+    }   
     compile("org.springframework:spring-jms:4.1.7.RELEASE")
     compile("org.apache.activemq:activemq-broker:5.11.1")
-   // compile("org.apache.activemq:activemq-core:5.7.0")  
+   
     testCompile "org.apache.camel:camel-test:$camelVersion" 
-    testCompile "org.apache.camel:camel-test-spring:$camelVersion" 
-    //compile("io.hawt:hawtio-embedded:1.4.20")
-    compile("io.hawt:hawtio-core:1.4.20")
-    
+    testCompile "org.apache.camel:camel-test-spring:$camelVersion"
+
     compile("org.projectlombok:lombok:${lombokVersion}")
-    compile("com.google.guava:guava:${guavaVersion}") 
-    compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.1.1'
-    compile 'org.apache.cxf:cxf-rt-transports-http:3.1.1'
-    compile 'org.apache.cxf:cxf-core:3.1.1'
+    compile("com.google.guava:guava:${guavaVersion}")
+     
+    compile 'org.apache.cxf:cxf-rt-management:3.1.2'
+    compile 'org.apache.cxf:cxf-rt-bindings-soap:3.1.2'
+    compile "org.apache.cxf:cxf-rt-frontend-jaxws:3.1.2"
+    compile 'org.apache.cxf:cxf-rt-transports-http:3.1.0'
+    compile "org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.2"
+    compile 'org.apache.cxf:cxf-rt-transports-jms:3.1.2'
+    compile "org.apache.cxf:cxf-core:3.1.2"
+    
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile 'com.jayway.awaitility:awaitility-java8:1.6.1'
     testCompile 'com.jayway.awaitility:awaitility:1.6.1'
@@ -78,3 +86,7 @@ println "Using Java version: [" + System.getProperty("java.version") + "]"
 task wrapper(type: Wrapper) {
 
 }
+    // compile("org.apache.activemq:activemq-core:5.7.0")   
+    //compile("io.hawt:hawtio-embedded:1.4.20")
+    //compile("io.hawt:hawtio-core:1.4.20")
+    

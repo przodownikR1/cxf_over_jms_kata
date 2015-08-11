@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel-cxf="http://camel.apache.org/schema/cxf"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    
+     <bean id="simpleWsService" class="pl.java.scalatech.spring_camel.ws.impl.SimpleWsImpl"/>
+   
+   <camel-cxf:cxfEndpoint id="simpleWsServiceEndpoint" address="http://localhost:8888/simpleWsPort" loggingFeatureEnabled="true"
+   serviceClass="pl.java.scalatech.spring_camel.ws.SimpleWs" >
+      <camel-cxf:features>
+	         <bean class="org.apache.cxf.feature.LoggingFeature" p:prettyLogging="true"/>       
+	   </camel-cxf:features>
+   </camel-cxf:cxfEndpoint>
+   
+   
+</beans>

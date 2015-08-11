@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.metrics.routepolicy.MetricsRoutePolicyFactory;
+import org.apache.camel.component.cxf.CxfEndpoint;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,6 @@ public class CamelConfig extends CamelConfiguration {
     @PostConstruct
     public void init() {
         camelContext.setTracing(true);
-
     }
 
     @Bean
@@ -58,13 +57,19 @@ public class CamelConfig extends CamelConfiguration {
         PropertiesComponent pc = new PropertiesComponent();
         pc.setLocation("classpath:application.properties");
         camelContext.addComponent("properties", pc);
-        log.info("++++++++++++++++++++++  beforeApplicationStart");
-        camelContext.addRoutePolicyFactory(new MetricsRoutePolicyFactory());
+        //camelContext.addRoutePolicyFactory(new MetricsRoutePolicyFactory());
         camelContext.setUseMDCLogging(useMDC);
         camelContext.setUseBreadcrumb(useBreadcrumb);
         camelContext.setTracing(traceFlag);
         super.setupCamelContext(camelContext);
-
     }
 
+    @Bean(name = "wsEndpoint")
+    public CxfEndpoint wsEndpoint() throws ClassNotFoundException {
+        CxfEndpoint cxfEndpoint = new CxfEndpoint();
+        cxfEndpoint.setAddress("http://localhost:8888/services/person");
+        cxfEndpoint.setServiceClass("pl.java.scalatech.spring_camel.service.impl.PersonServiceImpl");
+        cxfEndpoint.setLoggingFeatureEnabled(true);
+        return cxfEndpoint;
+    }
 }
