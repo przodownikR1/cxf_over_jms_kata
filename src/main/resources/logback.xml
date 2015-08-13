@@ -39,6 +39,7 @@
     <logger name="pl.java.scalatech" level="info" />
     <logger name="org.springframework" level="info" />
     <logger name="org.apache.camel" level="info" />
+    <logger name="org.apache.cxf" level="info" />
    <!--  <logger name="org.apache.cxf" level="info" /> -->
 
 

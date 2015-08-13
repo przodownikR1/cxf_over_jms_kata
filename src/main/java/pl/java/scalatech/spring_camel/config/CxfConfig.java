@@ -21,8 +21,10 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-import pl.java.scalatech.spring_camel.eip_beans.HelloWorld;
+import pl.java.scalatech.spring_camel.service.PersonService;
+import pl.java.scalatech.spring_camel.ws.HelloWorld;
 
 @Configuration
 @ComponentScan(basePackages = "pl.java.scalatech.service")
@@ -37,6 +39,9 @@ public class CxfConfig extends SpringBootServletInitializer {
 
     @Autowired
     private HelloWorld helloWorld;
+
+    @Autowired
+    private PersonService personService;
 
     @Bean
     public ServletRegistrationBean soapServletRegistrationBean() {
@@ -77,11 +82,17 @@ public class CxfConfig extends SpringBootServletInitializer {
         features.add(loggingFeature());
         bus.setFeatures(features);
         bus.setId("cxf");
-        bus.getExtension(CamelTransportFactory.class).setCamelContext(camelContext);
+
+        CamelTransportFactory camelTransportFactory = new CamelTransportFactory();
+        camelTransportFactory.setCamelContext(camelContext);
+        camelTransportFactory.setBus(bus);
+
+        // bus.getExtension(CamelTransportFactory.class).setCamelContext(camelContext);
         return bus;
     }
 
-    @Bean(name = "helloWorldProviderBean")
+    @Bean(name = "helloWorldBean")
+    @Profile("cxf_pure")
     public EndpointImpl helloWorldEndpoint() {
         log.info("++++ {} jaxwsEndpoint hello", cxf);
         EndpointImpl endpoint = new EndpointImpl(cxf, helloWorld);
@@ -91,17 +102,15 @@ public class CxfConfig extends SpringBootServletInitializer {
         return endpoint;
     }
 
-    /*
-     * @Bean(name = "personService")
-     * public CxfEndpoint getPersonService() throws ClassNotFoundException {
-     * CxfEndpoint cxfEndpoint = new CxfEndpoint();
-     * cxfEndpoint.setAddress("http://localhost:8888/services/person");
-     * cxfEndpoint.setServiceClass("pl.java.scalatech.spring_camel.service.impl.PersonServiceImpl");
-     * LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor();
-     * loggingOutInterceptor.setPrettyLogging(true);
-     * cxfEndpoint.getOutInterceptors().add(new LoggingOutInterceptor());
-     * cxfEndpoint.setLoggingFeatureEnabled(true);
-     * return cxfEndpoint;
-     * }
-     */
+    @Bean(name = "personServiceWs")
+    @Profile("cxf_pure")
+    public EndpointImpl personWs() {
+        EndpointImpl endpoint = new EndpointImpl(cxf, personService);
+        endpoint.setAddress("/personWs");
+        endpoint.setBus(cxf);
+        endpoint.publish();
+        return endpoint;
+
+    }
+
 }

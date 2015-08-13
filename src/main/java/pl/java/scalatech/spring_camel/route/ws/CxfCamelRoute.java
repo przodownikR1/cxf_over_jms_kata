@@ -10,13 +10,20 @@ public class CxfCamelRoute extends RouteBuilder {
     @Autowired
     private Endpoint wsEndpoint;
 
+    @Autowired
+    private Endpoint helloEndpoint;
+
+    @Autowired
+    private Endpoint dummy;
+
     @Override
     public void configure() throws Exception {
-        log.info("+++++++++++++++++++++++++++++++++++++++++++++++++  {}", wsEndpoint);
-        /*
-         * from(wsEndpoint).log(">> Received from CXF Java Endpoint : ${body}").setBody().simple("Bean Injected").beanRef("helloWorld", "sayHello")
-         * .log(">> Response : ${body}");
-         */
+        log.info(" +++  wsEndpoint   {}", wsEndpoint);
+        log.info(" +++ helloEndpoint {}", helloEndpoint);
+        log.info(" +++ dummy  {}", dummy);
+
+        //from("cxf:bean:helloEndpoint").setBody().simple("Bean Injected").beanRef("helloWorld", "sayHello").log(">> Response : ${body}");
+        //from("cxf:bean:dummy").setBody().simple("Bean Injected").log(">> Response : ${body}");
 
     }
 

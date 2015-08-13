@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:jaxws="http://cxf.apache.org/jaxws"
+  xmlns:camel="http://camel.apache.org/schema/spring"
+         xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-camel.xml" />
+
+   <bean  id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory" p:brokerURL="tcp://localhost:61616"/>
+             
+   <bean id="jmsConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory" p:targetConnectionFactory-ref="targetConnectionFactory" />
+       
+   <bean id="jms" class="org.apache.camel.component.jms.JmsComponent" p:connectionFactory-ref="jmsConnectionFactory">
+      <property name="useMessageIDAsCorrelationID" value="false" />
+    </bean>
+    
+    
+    <bean class="org.apache.camel.component.cxf.transport.CamelTransportFactory" p:bus-ref="cxf" p:camelContext-ref="camelContext">
+        <property name="transportIds">
+            <list>
+                <value>http://cxf.apache.org/transports/camel</value>
+            </list>
+        </property>
+    </bean>
+
+    <jaxws:client id="helloService" serviceClass="pl.java.scalatech.spring_camel.ws.HelloWorld" address="camel://direct:HelloService">
+        <jaxws:features>
+            <bean class="org.apache.cxf.feature.LoggingFeature">
+              <property name="prettyLogging" value="true"/>
+            </bean>
+        </jaxws:features>
+        
+    </jaxws:client>
+
+    <camel:camelContext id="camelContext" trace="true" useMDCLogging="true">
+        <camel:route>
+            <camel:from  uri="direct:HelloService"/>
+             <camel:log loggingLevel="INFO" logName="myCamel" message="${body}"/>
+            <camel:to uri="jms://queue:HelloService"/>
+        </camel:route>
+    </camel:camelContext>
+</beans>  

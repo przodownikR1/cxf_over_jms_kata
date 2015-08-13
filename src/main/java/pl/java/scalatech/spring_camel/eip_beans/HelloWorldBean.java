@@ -4,7 +4,7 @@ import org.apache.camel.Body;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HelloWorld {
+public class HelloWorldBean {
 
     public String sayHello(@Body String message) {
         return ">> Hello " + message + " user.";

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />
+
+	<cxf:cxfEndpoint id="helloEndpoint" address="http://localhost:8888/hello"
+		serviceClass="net.atos.camel.endpoints.IncomingOrderEndpoint">
+
+		<cxf:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+		</cxf:features>
+	</cxf:cxfEndpoint>
+
+
+</beans>
