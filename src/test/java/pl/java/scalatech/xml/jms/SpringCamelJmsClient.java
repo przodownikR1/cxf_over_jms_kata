@@ -24,7 +24,7 @@ public class SpringCamelJmsClient {
     @Test
     public void testSay() {
 
-        String sayHello = helloWorld.sayHi("przodownik");
+        String sayHello = helloWorld.sayHi("przodownik 2");
         log.info("{}", sayHello);
     }
 

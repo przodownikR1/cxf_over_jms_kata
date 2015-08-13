@@ -15,7 +15,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    <bean id="jmsConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory" p:targetConnectionFactory-ref="targetConnectionFactory" />
        
    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent" p:connectionFactory-ref="jmsConnectionFactory">
-      <property name="useMessageIDAsCorrelationID" value="false" />
+      <property name="useMessageIDAsCorrelationID" value="true" />  
     </bean>
     
     
@@ -35,12 +35,35 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         </jaxws:features>
         
     </jaxws:client>
+    
+    
+     <bean id="helloServiceImpl" class="pl.java.scalatech.spring_camel.ws.impl.HelloWorldImpl" />
+    
+    <jaxws:server id="helloService" serviceClass="pl.java.scalatech.spring_camel.ws.HelloWorld" address="camel://direct:HelloService2">
+        <jaxws:serviceBean>
+            <ref bean="helloServiceImpl"/>
+        </jaxws:serviceBean>
+        <jaxws:features>
+             <bean class="org.apache.cxf.feature.LoggingFeature">
+                <property name="prettyLogging" value="true"/>
+            </bean>
+        </jaxws:features>
+    </jaxws:server>
+
+    
 
     <camel:camelContext id="camelContext" trace="true" useMDCLogging="true">
-        <camel:route>
-            <camel:from  uri="direct:HelloService"/>
+        <camel:route id="in">
+            <camel:from  uri="direct:HelloService" />
              <camel:log loggingLevel="INFO" logName="myCamel" message="${body}"/>
-            <camel:to uri="jms://queue:HelloService"/>
+            <camel:to uri="jms://queue:testA" />
         </camel:route>
+        
+       <!--   <camel:route id="out">
+            <camel:from uri="jms://queue:testA"/>
+            <camel:log loggingLevel="INFO" logName="myCamel" message="${body}"/>
+            <camel:to uri="direct:HelloService2"/>
+        </camel:route> -->
+        
     </camel:camelContext>
 </beans>  
