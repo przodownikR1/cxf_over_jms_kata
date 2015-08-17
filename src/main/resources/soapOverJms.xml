@@ -1,0 +1,31 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:jaxws="http://cxf.apache.org/jaxws"
+  xmlns:camel="http://camel.apache.org/schema/spring"
+         xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+        
+     <import resource="classpath:commonJms.xml"/>
+     <import resource="classpath:camel-jmsclient.xml"/>
+     <import resource="classpath:camel-jmsserver.xml"/>
+    
+         
+    <camel:camelContext id="camelContext" trace="true" useMDCLogging="true">
+        <camel:route id="in">
+            <camel:from  uri="direct:HelloService"/>
+             <camel:log loggingLevel="INFO" logName="myCamel" message="${body}"/>
+            <camel:to uri="jms://queue:HelloService"/>
+        </camel:route>
+        
+       <camel:route id="out">
+            <camel:from uri="jms://queue:HelloService"/>
+            <camel:log loggingLevel="INFO" logName="myCamel" message="${body}"/>
+            <camel:to uri="direct:HelloServiceOut"/>
+        </camel:route>
+     
+    </camel:camelContext>
+        
+         
+</beans>

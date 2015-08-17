@@ -8,16 +8,14 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
         
         
-    <import resource="classpath:commonWs.xml"/>
-   
-    <bean id="helloServiceImpl" class="pl.java.scalatech.spring_camel.ws.impl.HelloWorldImpl" />
-   
-    <jaxws:server id="helloServiceOut" serviceClass="pl.java.scalatech.spring_camel.ws.HelloWorld" address="camel://direct:HelloServiceOut">
-        <jaxws:serviceBean>
-            <ref bean="helloServiceImpl"/>
-        </jaxws:serviceBean>
-        <jaxws:features>
-            <bean class="org.apache.cxf.feature.LoggingFeature" />
-        </jaxws:features>
-    </jaxws:server>
-</beans>  
+   <bean  id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory" p:brokerURL="tcp://localhost:61616"/>
+             
+   <bean id="jmsConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory" p:targetConnectionFactory-ref="targetConnectionFactory" />
+       
+   <bean id="jms" class="org.apache.camel.component.jms.JmsComponent" p:connectionFactory-ref="jmsConnectionFactory"/>
+   <!--  <property name="useMessageIDAsCorrelationID" value="true" /> -->
+    
+ 
+
+        
+</beans>

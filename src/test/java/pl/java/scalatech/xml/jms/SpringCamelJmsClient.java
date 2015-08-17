@@ -14,18 +14,16 @@ import pl.java.scalatech.spring_camel.ws.HelloWorld;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners(value = { DependencyInjectionTestExecutionListener.class })
-@ContextConfiguration(locations = { "classpath:camel-jmsclient.xml" })
+@ContextConfiguration(locations = { "classpath:soapOverJms.xml" })
 @Slf4j
 public class SpringCamelJmsClient {
 
     @Autowired
-    private HelloWorld helloWorld;
+    private HelloWorld helloService;
 
     @Test
     public void testSay() {
-
-        String sayHello = helloWorld.sayHi("przodownik 2");
-        log.info("{}", sayHello);
+        String sayHello = helloService.sayHi("przodownik 2");
+        log.info("+++      client      {}", sayHello);
     }
-
 }

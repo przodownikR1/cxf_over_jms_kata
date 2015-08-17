@@ -16,7 +16,7 @@ public class HelloWorldImpl implements HelloWorld {
     @Override
     public String sayHi(String text) {
         log.info("++++++++++++++++++++++++++++++++++  {}", text);
-        return "przodownik " + text;
+        return "Hello :  " + text;
     }
 
 }
