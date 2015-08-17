@@ -22,7 +22,7 @@ class MyRouteBuilder extends RouteBuilder {
     @Override
     public void configure() {
         DataFormat myJaxb = new JaxbDataFormat("pl.java.scalatech.spring_camel.beans");
-
+        //TODO : direct problem !
         from("seda:xml").marshal().jaxb().to("stream:out");
         Customer cust = new Customer("slawek", "borowiec", "przodownik", new BigDecimal(20000));
         getContext().createProducerTemplate().sendBody("seda:xml", cust);
