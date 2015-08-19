@@ -11,6 +11,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     <import resource="classpath:commonWs.xml"/>
    
     <bean id="helloServiceImpl" class="pl.java.scalatech.spring_camel.ws.impl.HelloWorldImpl" />
+    <camel:camelContext id="camelContext"/>
    
     <jaxws:server id="helloServiceOut" serviceClass="pl.java.scalatech.spring_camel.ws.HelloWorld" address="camel://direct:HelloServiceOut">
         <jaxws:serviceBean>
